@@ -15,7 +15,7 @@ try {
     console.log("Missing or corrupted config file. Have a look at config.js.example if you need an example.");
     process.exit(-1);
 }
-  
+
 
 // Override the drone ip using an environment variable,
 // using the same convention as node-ar-drone
@@ -59,7 +59,7 @@ function navdata_option_mask(c) {
 
 // From the SDK.
 var navdata_options = (
-    navdata_option_mask(arDroneConstants.options.DEMO) 
+    navdata_option_mask(arDroneConstants.options.DEMO)
   | navdata_option_mask(arDroneConstants.options.VISION_DETECT)
   | navdata_option_mask(arDroneConstants.options.MAGNETO)
   | navdata_option_mask(arDroneConstants.options.WIFI)
@@ -155,8 +155,86 @@ config.plugins.forEach(function (plugin) {
     }
 });
 
+////////////////////////////////
+////////////////////////////////
+////////////////////////////////
+
+var WebSocketServer = require('ws').Server;
+var wss = new WebSocketServer({'server':server});
+
+var mySocket = undefined;
+
+wss.on('connection', function(ws){
+
+	ws.on('message',function(msg){
+		myPort.write(msg);
+	});
+
+	ws.on('close',function(){
+		mySocket = undefined;
+	});
+
+	mySocket = ws;
+} );
+
+////////////////////////////////
+////////////////////////////////
+////////////////////////////////
+////////////////////////////////
+////////////////////////////////
+////////////////////////////////
+
+var serialport = require('serialport');
+var myPortName = '/dev/cu.usbmodemfa141';
+// var arDrone = require('ar-drone');
+// var client = arDrone.createClient();
+
+// serialport.list( function(error,ports){
+// 	console.log(ports);
+// });
+
+var options = {
+	baudrate: 9600,
+	parser: serialport.parsers.readline('\r\n')
+};
+
+var myPort = new serialport.SerialPort( myPortName , options);
+
+myPort.on('open',function(){
+	console.log('yay! it is open!');
+});
+
+//var value = "";
+
+myPort.on('data', function(mySensorValues) {
+  console.log("NEW DATA:" + mySensorValues);
+  //for (var i in mySensorValues) {
+    //var c = mySensorValues[i];
+    //if (c == 'n') {
+      //console.log("NEW VALUE:" + value);
+      //if(mySocket) {
+      //  mySocket.send(value);
+        //if (parseFloat(value) > 1000) {
+          client.takeoff();
+          console.log('taking off');
+          // client.after(1000, function()
+          // 	this.stop();
+          // 	this.land();
+        //}
+    //  }
+
+    //  value = "";
+    //} else {
+    //  value = value + c;
+    //}
+  //}
+});
+
+////////////////////////////////
+////////////////////////////////
+////////////////////////////////
+
 // Start the web server
 server.listen(app.get('port'), function() {
   console.log('AR. Drone WebFlight is listening on port ' + app.get('port'));
 });
-

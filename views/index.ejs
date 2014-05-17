@@ -23,6 +23,37 @@
   <script type="text/javascript" src="<%= scripts[i] %>"></script><% } %>
 
   <body>
+    <script type="text/javascript">
+      var ws = new WebSocket('ws://localhost:3000');
+      //var arDrone = require('ar-drone');
+      //var client = arDrone.createClient();
+
+      function take_off(){
+        console.log("registered");
+      }
+      ws.onopen = function(){
+        console.log('ws connection open');
+      };
+
+      ws.onmessage = function(msg){
+        var c = Math.floor(msg.data);
+        if (c > 1000){
+          take_off();
+        }
+        var colorString = 'rgb('+c+','+c+','+c+')';
+        document.body.style.backgroundColor = colorString;
+      };
+
+      window.onmousedown = function(){
+        ws.send('1');
+      };
+
+      window.onmouseup = function(){
+        ws.send('0');
+      };
+    </script>
+
+
     <div class="header-container">
       <span id="controls">
       </span>
