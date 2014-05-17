@@ -6,6 +6,7 @@ var express = require('express')
   , io = require('socket.io').listen(server)
   , arDrone = require('ar-drone')
   , arDroneConstants = require('ar-drone/lib/constants')
+  , ncp = require('ncp').ncp
   ;
 
 // Fetch configuration
@@ -185,7 +186,7 @@ wss.on('connection', function(ws){
 ////////////////////////////////
 
 var serialport = require('serialport');
-var myPortName = '/dev/cu.usbmodemfa141';
+var myPortName = '/dev/tty.usbmodemfd131';
 // var arDrone = require('ar-drone');
 // var client = arDrone.createClient();
 
@@ -206,8 +207,16 @@ myPort.on('open',function(){
 
 //var value = "";
 
+var buttonLog = [];
+
 myPort.on('data', function(mySensorValues) {
   console.log("NEW DATA:" + mySensorValues);
+
+  buttonLog.push(mySensorValues);
+  console.log("array length:" + buttonLog.length);
+
+  if (buttonLog.length === 9) {
+
   //for (var i in mySensorValues) {
     //var c = mySensorValues[i];
     //if (c == 'n') {
@@ -215,20 +224,44 @@ myPort.on('data', function(mySensorValues) {
       //if(mySocket) {
       //  mySocket.send(value);
         //if (parseFloat(value) > 1000) {
+          
+
           client.takeoff();
+
           console.log('taking off');
-          // client.after(1000, function()
-          // 	this.stop();
-          // 	this.land();
-        //}
-    //  }
+
+          client.after(3000, function(){
+            this.land(); 
+            
+                var ncp = require('ncp').ncp;
+
+                ncp.limit = 11;
+
+                ncp("./png", "./gif", function (err) {
+                 if (err) {
+                   return console.error(err);
+                 }
+                 console.log('done!');
+                });
+
+
+          });
+
+          } else if (buttonLog.length >= 9) {
+
+            buttonLog = [];
+
+          }
+          else { console.log ("else"); 
+
+        };
+        });
 
     //  value = "";
     //} else {
     //  value = value + c;
     //}
   //}
-});
 
 ////////////////////////////////
 ////////////////////////////////

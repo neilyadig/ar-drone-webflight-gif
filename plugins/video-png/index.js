@@ -1,4 +1,4 @@
-function video(name, deps) {
+function getPngVideo(name, deps) {
 
     var latestImage;
     var images = [];
@@ -82,4 +82,7 @@ function video(name, deps) {
     });
 };
 
-module.exports = video;
+
+ module.exports = getPngVideo;
+
+
