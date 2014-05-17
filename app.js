@@ -232,12 +232,18 @@ myPort.on('data', function(mySensorValues) {
 
           client.after(3000, function(){
             this.land(); 
-            
-                var ncp = require('ncp').ncp;
 
-                ncp.limit = 11;
+              var gifdir = fs.readdirSync('./gif') // READ GIF DIR
 
-                ncp("./png", "./gif", function (err) {
+              var count = gifdir.length + 1; //COUNT FOLDERS IN GIF DIR AND INCREMENT +1
+              console.log(count.length);
+
+              fs.mkdir(count.toString());
+
+                //COPY FROM PNG SOURCE FOLDER TO GIF+1 ON BUTTONPRESS
+                ncp.limit = 16;
+
+                ncp("./png", "./gif/" + count, function (err) {
                  if (err) {
                    return console.error(err);
                  }

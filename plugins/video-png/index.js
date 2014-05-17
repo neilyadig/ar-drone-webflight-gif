@@ -53,6 +53,7 @@ function getPngVideo(name, deps) {
             // console.log('It\'s saved! 5');
 
           });
+
           fs.writeFile('png/image6.png', images[5], function(err){
             if (err) throw err;
             // console.log('It\'s saved! 6');
@@ -63,11 +64,13 @@ function getPngVideo(name, deps) {
             // console.log('It\'s saved! 7');
 
           });
+
            fs.writeFile('png/image8.png', images[7], function(err){
             if (err) throw err;
             // console.log('It\'s saved! 7');
 
           });
+
           fs.writeFile('png/image9.png', images[8], function(err){
             if (err) throw err;
             // console.log('It\'s saved! 9');
