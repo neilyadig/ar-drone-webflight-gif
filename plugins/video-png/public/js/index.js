@@ -1,5 +1,5 @@
 (function(window, document) {
-    
+
         var Video = function Video(cockpit) {
             console.log("Initializing video plugin.");
             

@@ -215,7 +215,7 @@ myPort.on('data', function(mySensorValues) {
   buttonLog.push(mySensorValues);
   console.log("array length:" + buttonLog.length);
 
-  if (buttonLog.length === 9) {
+  if (buttonLog.length === 1) {
 
   //for (var i in mySensorValues) {
     //var c = mySensorValues[i];
@@ -227,18 +227,20 @@ myPort.on('data', function(mySensorValues) {
           
 
           client.takeoff();
-
           console.log('taking off');
 
-          client.after(3000, function(){
+           client.after(4000, function(){
+            this.stop();
             this.land(); 
+            });
 
+            setTimeout(function() {
               var gifdir = fs.readdirSync('./gif') // READ GIF DIR
 
               var count = gifdir.length + 1; //COUNT FOLDERS IN GIF DIR AND INCREMENT +1
-              console.log(count.length);
+              console.log('FOLDER-COUNT: ' + gifdir.length);
 
-              fs.mkdir(count.toString());
+              //fs.mkdir(count.toString());
 
                 //COPY FROM PNG SOURCE FOLDER TO GIF+1 ON BUTTONPRESS
                 ncp.limit = 16;
@@ -249,18 +251,16 @@ myPort.on('data', function(mySensorValues) {
                  }
                  console.log('done!');
                 });
+            }, 5000);
 
-
-          });
-
-          } else if (buttonLog.length >= 9) {
+          } else if (buttonLog.length >= 2) {
 
             buttonLog = [];
 
           }
           else { console.log ("else"); 
 
-        };
+          };
         });
 
     //  value = "";

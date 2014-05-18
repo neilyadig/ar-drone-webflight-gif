@@ -6,15 +6,20 @@ void setup() {
   pinMode(ledPin,OUTPUT);
 }
 
+
+
 void loop() {
   if (analogRead(sensorPin) > 1000) {
     Serial.println("FUCKING LAUNCH");
  // Serial.print( analogRead(sensorPin));
  // Serial.println("n");
   }
-  if(Serial.available()>0){
+  
+  
+  
+  if(Serial.available() > 0){
     char inByte;
-    while(Serial.available()>0){
+    while(Serial.available() > 0){
       inByte = Serial.read();
     }
     
@@ -26,5 +31,5 @@ void loop() {
     }
   }
   
-  delay(30);   
+  delay(3000);   
 }
